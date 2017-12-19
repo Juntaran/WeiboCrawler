@@ -41,8 +41,9 @@ func CrawUserFollow(username, realID string, followNum int) {
 		pageNum := strconv.Itoa(i)
 		getFollow(username, realID, pageNum)
 	}
-	log.Println(g.FOLLOWS[username])
-	log.Println(len(g.FOLLOWS[username]))
+	log.Println(username, "'s Follow", g.FOLLOWS[username])
+	//log.Println(len(g.FOLLOWS[username]))
+	return
 }
 
 func getFans(username, realID, pageNum string)  {
@@ -74,8 +75,9 @@ func CrawUserFans(username, realID string, fansNum int) {
 		pageNum := strconv.Itoa(i)
 		getFans(username, realID, pageNum)
 	}
-	log.Println(g.FANS[username])
-	log.Println(len(g.FANS[username]))
+	log.Println(username, "'s Fans", g.FANS[username])
+	//log.Println(len(g.FANS[username]))
+	return
 }
 
 // 通过 weibo.cn/u/{realId}

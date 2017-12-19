@@ -12,6 +12,7 @@ import (
 	"bufio"
 	"strings"
 	"io"
+	"weiboCrawler/g"
 )
 
 func ReadLineTxt(fileName string) ([]string, error) {
@@ -27,10 +28,12 @@ func ReadLineTxt(fileName string) ([]string, error) {
 		line = strings.TrimSpace(line)
 		if len(line) > 0 {
 			nameList = append(nameList, line)
+			g.Tasks <- line
 		}
 		if err != nil {
 			if err == io.EOF {
 				log.Println("Read File Finish")
+				close(g.Tasks)
 				return nameList, nil
 			}
 			log.Println("Read File Error:", err)

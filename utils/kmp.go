@@ -63,7 +63,7 @@ func getNextValueArray(sub []byte) (next []int) {
 }
 
 func reviseNextValueArray(next []int) []int {
-	var length int = len(next)
+	var length = len(next)
 	for i := 2; i < length; i++ {
 		if next[i] == next[next[i]] {
 			next[i] = next[next[i]]

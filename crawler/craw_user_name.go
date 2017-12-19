@@ -7,35 +7,15 @@
 package crawler
 
 import (
-	"io/ioutil"
-	"net/http"
 	"log"
+	"strconv"
 	"weiboCrawler/g"
 	"weiboCrawler/utils"
-	"strconv"
 )
 
-func getFollow(username, realID, pageNum string) []string {
+func getFollow(username, realID, pageNum string)  {
 	// 获取关注list 	https://weibo.cn/{realID}/follow
-	req, err := http.NewRequest("GET", "https://weibo.cn/" + realID + "/follow?page=" + pageNum, nil)
-	if err != nil {
-		log.Println("NewRequest Error:", err)
-	}
-	req.Header.Set("Connection", "keep-alive")
-	req.Header.Set("cookie", g.CNCookie)
-	req.Header.Set("DNT", "1")
-	req.Header.Set("Host", "weibo.cn")
-	req.Header.Set("Upgrade-Insecure-Requests", "1")
-	req.Header.Set("User-Agent", g.HEADERS[utils.RandHeaders()])
-
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		log.Println("DefaultClient Error:", err)
-	}
-	body, _ := ioutil.ReadAll(resp.Body)
-	//log.Println("body:", string(body))
-	defer resp.Body.Close()
-
+	body := utils.GetRequest("https://weibo.cn/" + realID + "/follow?page=" + pageNum)
 	pos := 0
 
 	for {
@@ -51,8 +31,51 @@ func getFollow(username, realID, pageNum string) []string {
 		g.FOLLOWS[username] = append(g.FOLLOWS[username], ret)
 		pos = pos2 + 1
 	}
+}
 
-	return nil
+func CrawUserFollow(username, realID string, followNum int) {
+	for i := 1; i <= followNum/10+1; i++ {
+		if i > 20 {
+			break
+		}
+		pageNum := strconv.Itoa(i)
+		getFollow(username, realID, pageNum)
+	}
+	log.Println(g.FOLLOWS[username])
+	log.Println(len(g.FOLLOWS[username]))
+}
+
+func getFans(username, realID, pageNum string)  {
+	// 获取关注list 	https://weibo.cn/{realID}/follow
+	body := utils.GetRequest("https://weibo.cn/" + realID + "/fans?page=" + pageNum)
+	//log.Println(string(body))
+	pos := 0
+
+	for {
+		pos1 := utils.KMP(body, pos, len(body)-1, []byte("</a></td><td valign=\"top\"><a href="))
+		if pos1 == -1 {
+			break
+		}
+		pos2 := utils.KMP(body, pos1+35, len(body)-1, []byte("\">"))
+		//log.Println(pos1, pos2)
+		pos3 := utils.KMP(body, pos2+2, len(body)-1, []byte("</a"))
+		ret := string(body)[pos2+2:pos3]
+		//log.Println(ret)
+		g.FANS[username] = append(g.FANS[username], ret)
+		pos = pos2 + 1
+	}
+}
+
+func CrawUserFans(username, realID string, fansNum int) {
+	for i := 1; i <= fansNum/10+1; i++ {
+		if i > 20 {
+			break
+		}
+		pageNum := strconv.Itoa(i)
+		getFans(username, realID, pageNum)
+	}
+	log.Println(g.FANS[username])
+	log.Println(len(g.FANS[username]))
 }
 
 // 通过 weibo.cn/u/{realId}
@@ -63,39 +86,20 @@ func CrawUserName(username string)  {
 	if err != nil {
 		return
 	}
-	req, err := http.NewRequest("GET", "https://weibo.cn/" + realID + "/follow", nil)
-	if err != nil {
-		log.Println("NewRequest Error:", err)
-	}
-	req.Header.Set("Connection", "keep-alive")
-	req.Header.Set("cookie", g.CNCookie)
-	req.Header.Set("DNT", "1")
-	req.Header.Set("Host", "weibo.cn")
-	req.Header.Set("Upgrade-Insecure-Requests", "1")
-	req.Header.Set("User-Agent", g.HEADERS[utils.RandHeaders()])
 
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		log.Println("DefaultClient Error:", err)
-	}
-	body, _ := ioutil.ReadAll(resp.Body)
-	//log.Println("body:", string(body))
-	defer resp.Body.Close()
+	followBody := utils.GetRequest("https://weibo.cn/" + realID + "/follow")
+	pos1 := utils.KMP(followBody, 0, len(followBody)-1, []byte("关注["))
+	pos2 := utils.KMP(followBody, pos1, len(followBody)-1, []byte("]<"))
+	pos3 := utils.KMP(followBody, pos2, len(followBody)-1, []byte("粉丝["))
+	pos4 := utils.KMP(followBody, pos3, len(followBody)-1, []byte("]<"))
 
-	ret1 := utils.KMP(body, 0, len(body)-1, []byte("关注["))
-	ret2 := utils.KMP(body, ret1, len(body)-1, []byte("]<"))
-	log.Println(username, "关注了:", string(body)[ret1+7:ret2], "个人")
+	followNum, _ := strconv.Atoi(string(followBody)[pos1+7:pos2])
+	fansNum,   _ := strconv.Atoi(string(followBody)[pos3+7:pos4])
 
-	followNum, _ := strconv.Atoi(string(body)[ret1+7:ret2])
-	for i := 1; i <= followNum/10+1; i++ {
-		if i > 20 {
-			break
-		}
-		pageNum := strconv.Itoa(i)
-		getFollow(username, realID, pageNum)
-	}
+	log.Println(username, "关注:", followNum)
+	log.Println(username, "粉丝:", fansNum)
 
-	log.Println(g.FOLLOWS)
-	log.Println(len(g.FOLLOWS[username]))
+	go CrawUserFollow(username, realID, followNum)
+	go CrawUserFans(username, realID, followNum)
 }
 

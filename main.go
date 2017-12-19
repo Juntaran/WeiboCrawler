@@ -41,11 +41,6 @@ func main() {
 	}
 	log.Println("nameList:", nameList)
 
-	//// 对每个写在配置中的微博开启一个 goroutine
-	//for _, v := range nameList {
-	//	go crawler.CrawUserName(v)
-	//}
-
 	// 启动 goroutine 开始工作
 	var wg sync.WaitGroup
 	wg.Add(g.MaxGoroutines)
@@ -54,7 +49,7 @@ func main() {
 		go worker(g.Tasks, crawler.CrawUserName, wg, i, g.Done)
 	}
 	wg.Wait()
-	log.Println("处理完毕")
+	log.Println("End")
 
 	//var end chan struct{}
 	//end <- struct{}{}

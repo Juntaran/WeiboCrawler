@@ -29,6 +29,7 @@ func getFollow(username, realID, pageNum string)  {
 		ret := string(body)[pos2+2:pos3]
 		//log.Println(ret)
 		g.FOLLOWS[username] = append(g.FOLLOWS[username], ret)
+		g.Tasks <- ret
 		pos = pos2 + 1
 	}
 }
@@ -63,6 +64,7 @@ func getFans(username, realID, pageNum string)  {
 		ret := string(body)[pos2+2:pos3]
 		//log.Println(ret)
 		g.FANS[username] = append(g.FANS[username], ret)
+		g.Tasks <- ret
 		pos = pos2 + 1
 	}
 }
@@ -88,6 +90,13 @@ func CrawUserName(username string)  {
 	if err != nil {
 		return
 	}
+
+	// 根据 bloomFilter 判断是否已经处理
+	if g.BloomFilter.Test([]byte(username)) == true {
+		log.Println(username, "已经处理")
+		return
+	}
+	g.BloomFilter.Add([]byte(username))
 
 	followBody := utils.GetRequest("https://weibo.cn/" + realID + "/follow")
 	pos1 := utils.KMP(followBody, 0, len(followBody)-1, []byte("关注["))

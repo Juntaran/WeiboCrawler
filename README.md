@@ -13,10 +13,19 @@
 
 ## 使用方法
 
-修改 `g/g_crawler.go` 中的 `MCNCookie` 和 `CNCookie`  
-分别对应 `m.weibo.cn` 的 Cookie 和 `weibo.cn`  的 Cookie  
+修改 `g/g_crawler.go` 中的 `MCNCookie` 和 `CNCookie`   
+分别对应 `m.weibo.cn` 的 Cookie 和 `weibo.cn`  的 Cookie   
+
+所有可以改动的配置都在 `g` 目录下，
 
 在 `nicknames.txt` 中，填入你要爬取的用户名，一行一个  
+然后会以这些用户作为起点，爬取 Fans & Follows  
+再把这些 Fans & Follows 入队，无限循环  
+
+## 存在的问题
+
+1. 当前版本未关闭爬取 goroutine，如果想试用请自己加个 `return`  
+2. 当前版本未加入限速，请自己加个 `Sleep()`  
 
 ## 吐槽
 

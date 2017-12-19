@@ -19,7 +19,7 @@ var HEADERS = []string{
 }
 
 var FOLLOWS = make(map[string][]string)
-var FANS = make(map[string][]string)
+var FANS    = make(map[string][]string)
 
 type User struct {
 	USERNAME string
@@ -28,4 +28,4 @@ type User struct {
 }
 
 var MCNCookie = ""
-var CNCookie = ""
+var CNCookie  = ""

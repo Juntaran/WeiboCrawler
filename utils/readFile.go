@@ -33,7 +33,7 @@ func ReadLineTxt(fileName string) ([]string, error) {
 		if err != nil {
 			if err == io.EOF {
 				log.Println("Read File Finish")
-				close(g.Tasks)
+				//close(g.Tasks)
 				return nameList, nil
 			}
 			log.Println("Read File Error:", err)

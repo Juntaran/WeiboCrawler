@@ -46,7 +46,7 @@
 
 ### html 解析
 
-鉴于 go 没有较好的 html 解析工具，`goqueriy` 也不尽如人意  
+鉴于 go 没有较好的 html 解析工具，`goquery` 也不尽如人意  
 采用了最粗暴的方法：KMP 扫描  
 希望未来 go 会有像 python 的 lxml beautifulsoup 这些东西  
 

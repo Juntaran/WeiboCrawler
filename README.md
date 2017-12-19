@@ -24,8 +24,8 @@
 
 ## 存在的问题
 
-1. 当前版本未关闭爬取 goroutine，如果想试用请自己加个 `return`  
-2. 当前版本未加入限速，请自己加个 `Sleep()`  
+1. 当前版本未关闭爬取 goroutine，如果想试用请自己加个 `return`   
+2. 当前版本未加入限速，请自己加个 `Sleep()`
 
 ## 吐槽
 
@@ -48,6 +48,6 @@
 
 鉴于 go 没有较好的 html 解析工具，`goqueriy` 也不尽如人意  
 采用了最粗暴的方法：KMP 扫描  
-希望未来 go 会有像 python 的 lxml beautfiulsoup 这些东西  
+希望未来 go 会有像 python 的 lxml beautifulsoup 这些东西  
 
 

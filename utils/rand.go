@@ -9,7 +9,7 @@ package utils
 import (
 	"math/rand"
 	"time"
-	"weiboCrawler/g"
+	"WeiboCrawler/g"
 )
 
 func RandHeaders() int {

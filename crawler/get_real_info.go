@@ -12,8 +12,8 @@ import (
 	"net/http"
 	"log"
 	"errors"
-	"weiboCrawler/g"
-	"weiboCrawler/utils"
+	"WeiboCrawler/g"
+	"WeiboCrawler/utils"
 )
 
 // 根据用户名返回真实的 userID

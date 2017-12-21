@@ -1,4 +1,4 @@
-# weiboCrawler
+# WeiboCrawler
 
 一个微博爬虫，出于无聊帮师兄写的   
   

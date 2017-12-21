@@ -7,9 +7,9 @@
 package main
 
 import (
-	"weiboCrawler/utils"
-	"weiboCrawler/g"
-	"weiboCrawler/crawler"
+	"WeiboCrawler/utils"
+	"WeiboCrawler/g"
+	"WeiboCrawler/crawler"
 	"log"
 	"sync"
 )

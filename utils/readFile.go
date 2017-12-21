@@ -12,7 +12,7 @@ import (
 	"bufio"
 	"strings"
 	"io"
-	"weiboCrawler/g"
+	"WeiboCrawler/g"
 )
 
 func ReadLineTxt(fileName string) ([]string, error) {

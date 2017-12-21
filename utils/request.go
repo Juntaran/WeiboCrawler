@@ -10,7 +10,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"log"
-	"weiboCrawler/g"
+	"WeiboCrawler/g"
 )
 
 func GetRequest(url string) []byte {

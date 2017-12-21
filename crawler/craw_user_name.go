@@ -9,8 +9,8 @@ package crawler
 import (
 	"log"
 	"strconv"
-	"weiboCrawler/g"
-	"weiboCrawler/utils"
+	"WeiboCrawler/g"
+	"WeiboCrawler/utils"
 )
 
 func getFollow(username, realID, pageNum string)  {

@@ -7,7 +7,7 @@
 package crawler
 
 import (
-	"weiboCrawler/utils"
+	"WeiboCrawler/utils"
 	"log"
 	"github.com/tidwall/gjson"
 	"os"

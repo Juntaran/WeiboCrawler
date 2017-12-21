@@ -10,8 +10,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"log"
-	"weiboCrawler/g"
-	"weiboCrawler/utils"
+	"WeiboCrawler/g"
+	"WeiboCrawler/utils"
 )
 
 func LoginMWeiboCN()  {

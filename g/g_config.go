@@ -8,7 +8,7 @@ package g
 
 import "github.com/willf/bloom"
 
-const MaxGoroutines = 2			// 最多同时处理用户数，每个用户处理的时候会额外开启两个 goroutine 用来同时获取 follow fans
+const MaxGoroutines = 2			// 最多同时处理用户数，每个用户处理的时候会额外开启3个 goroutine 用来同时获取 follow fans pictures
 const TaskLoad      = 10000		// 缓冲 channel 的容量
 
 const BFN = uint(10000)								// BloomFilter 容量

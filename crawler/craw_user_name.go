@@ -28,7 +28,10 @@ func getFollow(username, realID, pageNum string)  {
 		pos3 := utils.KMP(body, pos2+2, len(body)-1, []byte("</a"))
 		ret := string(body)[pos2+2:pos3]
 		//log.Println(ret)
-		g.FOLLOWS[username] = append(g.FOLLOWS[username], ret)
+		g.FOLLOWS.Lock()
+		g.FOLLOWS.Map[username] = append(g.FOLLOWS.Map[username], ret)
+		g.FOLLOWS.Unlock()
+
 		g.Tasks <- ret
 		pos = pos2 + 1
 	}
@@ -42,7 +45,9 @@ func CrawUserFollow(username, realID string, followNum int) {
 		pageNum := strconv.Itoa(i)
 		getFollow(username, realID, pageNum)
 	}
-	log.Println(username, "'s Follow", g.FOLLOWS[username])
+	g.FOLLOWS.RLock()
+	log.Println(username, "'s Follow", g.FOLLOWS.Map[username])
+	g.FOLLOWS.RUnlock()
 	//log.Println(len(g.FOLLOWS[username]))
 	return
 }
@@ -63,8 +68,12 @@ func getFans(username, realID, pageNum string)  {
 		pos3 := utils.KMP(body, pos2+2, len(body)-1, []byte("</a"))
 		ret := string(body)[pos2+2:pos3]
 		//log.Println(ret)
-		g.FANS[username] = append(g.FANS[username], ret)
+
+		g.FANS.Lock()
+		g.FANS.Map[username] = append(g.FANS.Map[username], ret)
+		g.FANS.Unlock()
 		g.Tasks <- ret
+
 		pos = pos2 + 1
 	}
 }
@@ -77,7 +86,9 @@ func CrawUserFans(username, realID string, fansNum int) {
 		pageNum := strconv.Itoa(i)
 		getFans(username, realID, pageNum)
 	}
-	log.Println(username, "'s Fans", g.FANS[username])
+	g.FANS.RLock()
+	log.Println(username, "'s Follow", g.FANS.Map[username])
+	g.FANS.RUnlock()
 	//log.Println(len(g.FANS[username]))
 	return
 }
@@ -112,5 +123,6 @@ func CrawUserName(username string)  {
 
 	go CrawUserFollow(username, realID, followNum)
 	go CrawUserFans(username, realID, followNum)
+	go CrawPicture(username)
 }
 

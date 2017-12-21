@@ -1,10 +1,14 @@
-/**
- * Author: Juntaran
- * Email:  Jacinthmail@gmail.com
- * Date:   2017/12/18 18:24
- */
+/** 
+  * Author: Juntaran 
+  * Email:  Jacinthmail@gmail.com 
+  * Date:   2017/12/18 18:24
+  */
 
 package g
+
+import (
+	"sync"
+)
 
 const NICKNAMES_FILE = "nicknames.txt"
 
@@ -18,14 +22,24 @@ var HEADERS = []string{
 	"Mozilla/5.0 (Unknown; Linux) AppleWebKit/538.1 (KHTML, like Gecko) Chrome/v1.0.0 Safari/538.1",
 }
 
-var FOLLOWS = make(map[string][]string)
-var FANS    = make(map[string][]string)
+var FOLLOWS  = new(SafeMap)
+var FANS     = new(SafeMap)
 
 type User struct {
-	USERNAME string
-	FANS     map[string][]string
-	FOLLOWS  map[string][]string
+	USERNAME	string
+	FANS 		map[string][]string
+	FOLLOWS		map[string][]string
+}
+
+type SafeMap struct {
+	sync.RWMutex
+	Map map[string][]string
 }
 
 var MCNCookie = ""
 var CNCookie  = ""
+
+func init() {
+	FOLLOWS.Map = make(map[string][]string)
+	FANS.Map    = make(map[string][]string)
+}
